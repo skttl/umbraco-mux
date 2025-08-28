@@ -1,0 +1,14 @@
+{
+    "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json", 
+    "AuthorDetails": {
+      "Name": "Søren Kottal",
+      "ImageUrl": "https://github.com/skttl.png"
+    },
+    "Category": "",
+    "Description": "",
+    "LicenseTypes": [ "Free" ],
+    "IssueTrackerUrl": "https://github.com/skttl/umbraco-mux/issues",
+    "PackageType": "Package",
+    "Tags": [],
+    "Title": "uMux "
+  }

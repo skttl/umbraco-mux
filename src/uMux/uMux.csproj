@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <StaticWebAssetBasePath>/</StaticWebAssetBasePath>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>IDE1006</WarningsNotAsErrors>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Product>Umbraco.Community.uMux</Product>
+    <PackageId>Umbraco.Community.uMux</PackageId>
+    <Title>uMux </Title>
+    <Description>...</Description>
+    <PackageTags>umbraco;umbraco-marketplace</PackageTags>
+    <Authors>Søren Kottal</Authors>
+    <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Søren Kottal</Copyright>
+    <PackageProjectUrl>https://github.com/skttl/umbraco-mux</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/skttl/umbraco-mux</RepositoryUrl>
+    <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon></PackageIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Mux.Csharp.Sdk" Version="2.1.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="16.2.0-rc" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" Version="16.2.0-rc" />
+    <PackageReference Include="Umbraco.Cms.Api.Common" Version="16.2.0-rc" />
+    <PackageReference Include="Umbraco.Cms.Api.Management" Version="16.2.0-rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Dont include the client folder as part of packaging nuget build -->
+    <Content Remove="Client\**" />
+    <!-- However make the Umbraco-package.json included for dotnet pack or nuget package and visible to the solution -->
+    <None Include="Client\public\umbraco-package.json" Pack="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\docs\README_nuget.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+</Project>

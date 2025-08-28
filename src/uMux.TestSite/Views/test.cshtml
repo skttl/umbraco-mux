@@ -1,0 +1,37 @@
+@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Test>
+@{
+	Layout = null;
+}
+
+@if(Model.Mux != null)
+{
+    <div style="display:flex;">
+        <div>
+            <img src="https://image.mux.com/@Model.Mux.PlaybackId/animated.gif?width=320" />
+        </div>
+        <div>
+            <img src="https://image.mux.com/@Model.Mux.PlaybackId/thumbnail.png?width=214&height=121&time=4" />
+        </div>
+        <div>
+            <img src="https://image.mux.com/@Model.Mux.PlaybackId/storyboard.png" />
+        </div>
+    <div>
+        <iframe
+  src="https://player.mux.com/@Model.Mux.PlaybackId"
+  style="width: 100%; border: none; aspect-ratio: 16/9;"
+  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+  allowfullscreen
+></iframe>
+    </div>
+
+    <div>
+        <script src="https://cdn.jsdelivr.net/npm/@@mux/mux-player" defer></script>
+<mux-player
+  playback-id="@Model.Mux.PlaybackId"
+  metadata-video-title="Test VOD"
+  metadata-viewer-user-id="user-id-007"
+></mux-player>
+    </div>
+    </div>
+}
