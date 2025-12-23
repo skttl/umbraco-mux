@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.Notifications;
@@ -13,19 +14,20 @@ public class MemberNotifications
         INotificationAsyncHandler<MemberSavingNotification>
 {
     public MemberNotifications(
+        ILogger<MemberNotifications> logger,
         IDataTypeService dataTypeService,
         IMuxService muxService,
         MediaFileManager mediaFileManager
     )
-        : base(dataTypeService, muxService, mediaFileManager) { }
+        : base(logger, dataTypeService, muxService, mediaFileManager) { }
 
     public Task HandleAsync(
         MemberDeletedNotification notification,
         CancellationToken cancellationToken
-    ) => Task.WhenAll(notification.DeletedEntities.Select(DeleteSyncedUploadFilesFromMux));
+    ) => Task.WhenAll(notification.DeletedEntities.Select(TryDeleteSyncedUploadFilesFromMux));
 
     public async Task HandleAsync(
         MemberSavingNotification notification,
         CancellationToken cancellationToken
-    ) => await Task.WhenAll(notification.SavedEntities.Select(SyncUploadFilesToMux));
+    ) => await Task.WhenAll(notification.SavedEntities.Select(TrySyncUploadFilesToMux));
 }

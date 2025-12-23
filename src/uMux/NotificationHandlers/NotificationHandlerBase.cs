@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
@@ -10,19 +11,53 @@ namespace uMux.NotificationHandlers;
 
 public abstract class NotificationHandlerBase
 {
+    private readonly ILogger<NotificationHandlerBase> _logger;
     private readonly IDataTypeService _dataTypeService;
     private readonly IMuxService _muxService;
     private readonly MediaFileManager _mediaFileManager;
 
     public NotificationHandlerBase(
+        ILogger<NotificationHandlerBase> logger,
         IDataTypeService dataTypeService,
         IMuxService muxService,
-        MediaFileManager mediaFileManager
-    )
+        MediaFileManager mediaFileManager)
     {
+        _logger = logger;
         _dataTypeService = dataTypeService;
         _muxService = muxService;
         _mediaFileManager = mediaFileManager;
+    }
+
+    public async Task<bool> TryDeleteSyncedUploadFilesFromMux(IContentBase node)
+    {
+        try
+        {
+            return await DeleteSyncedUploadFilesFromMux(node);
+        }
+        catch
+        {
+            _logger.LogError(
+                "An error occurred while deleting synced upload files from Mux for content with ID {ContentId}",
+                node.Id
+            );
+            return false;
+        }
+    }
+
+    public async Task<bool> TrySyncUploadFilesToMux(IContentBase node)
+    {
+        try
+        {
+            return await SyncUploadFilesToMux(node);
+        }
+        catch
+        {
+            _logger.LogError(
+                "An error occurred while syncing upload files to Mux for content with ID {ContentId}",
+                node.Id
+            );
+            return false;
+        }
     }
 
     /// <summary>

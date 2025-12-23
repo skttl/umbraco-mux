@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.Notifications;
@@ -17,12 +18,13 @@ public class ContentNotifications
     private readonly IContentService _contentService;
 
     public ContentNotifications(
+        ILogger<ContentNotifications> logger,
         IContentService contentService,
         IDataTypeService dataTypeService,
         IMuxService muxService,
         MediaFileManager mediaFileManager
     )
-        : base(dataTypeService, muxService, mediaFileManager)
+        : base(logger, dataTypeService, muxService, mediaFileManager)
     {
         _contentService = contentService;
     }
@@ -33,12 +35,12 @@ public class ContentNotifications
     public async Task HandleAsync(
         ContentDeletedBlueprintNotification notification,
         CancellationToken cancellationToken
-    ) => await Task.WhenAll(notification.DeletedBlueprints.Select(DeleteSyncedUploadFilesFromMux));
+    ) => await Task.WhenAll(notification.DeletedBlueprints.Select(TryDeleteSyncedUploadFilesFromMux));
 
     public async Task HandleAsync(
         ContentDeletedNotification notification,
         CancellationToken cancellationToken
-    ) => await Task.WhenAll(notification.DeletedEntities.Select(DeleteSyncedUploadFilesFromMux));
+    ) => await Task.WhenAll(notification.DeletedEntities.Select(TryDeleteSyncedUploadFilesFromMux));
 
     public void Handle(ContentSavedBlueprintNotification notification)
     {
@@ -54,5 +56,5 @@ public class ContentNotifications
     public async Task HandleAsync(
         ContentSavingNotification notification,
         CancellationToken cancellationToken
-    ) => await Task.WhenAll(notification.SavedEntities.Select(SyncUploadFilesToMux));
+    ) => await Task.WhenAll(notification.SavedEntities.Select(TrySyncUploadFilesToMux));
 }

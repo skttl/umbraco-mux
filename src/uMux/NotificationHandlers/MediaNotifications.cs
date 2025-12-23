@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.IO;
 using Umbraco.Cms.Core.Notifications;
@@ -12,19 +13,20 @@ public class MediaNotifications
         INotificationAsyncHandler<MediaDeletedNotification>
 {
     public MediaNotifications(
+        ILogger<MediaNotifications> logger,
         IDataTypeService dataTypeService,
         IMuxService muxService,
         MediaFileManager mediaFileManager
     )
-        : base(dataTypeService, muxService, mediaFileManager) { }
+        : base(logger, dataTypeService, muxService, mediaFileManager) { }
 
     public async Task HandleAsync(
         MediaSavingNotification notification,
         CancellationToken cancellationToken
-    ) => await Task.WhenAll(notification.SavedEntities.Select(SyncUploadFilesToMux));
+    ) => await Task.WhenAll(notification.SavedEntities.Select(TrySyncUploadFilesToMux));
 
     public async Task HandleAsync(
         MediaDeletedNotification notification,
         CancellationToken cancellationToken
-    ) => await Task.WhenAll(notification.DeletedEntities.Select(DeleteSyncedUploadFilesFromMux));
+    ) => await Task.WhenAll(notification.DeletedEntities.Select(TryDeleteSyncedUploadFilesFromMux));
 }
