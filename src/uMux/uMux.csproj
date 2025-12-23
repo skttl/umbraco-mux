@@ -17,7 +17,7 @@
     <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Søren Kottal</Copyright>
     <PackageProjectUrl>https://github.com/skttl/umbraco-mux</PackageProjectUrl>
     <RepositoryUrl>https://github.com/skttl/umbraco-mux</RepositoryUrl>
-    <PackageReadmeFile>README_nuget.md</PackageReadmeFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIcon></PackageIcon>
@@ -36,7 +36,7 @@
     <None Include="Client\public\umbraco-package.json" Pack="false" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\docs\README_nuget.md">
+    <None Include="..\..\.github\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
