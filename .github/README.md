@@ -60,11 +60,11 @@ Umbraco__Mux__ApiSecret=API SECRET HERE
 
 Credentials can be found from the settings page in your Mux environment.
 
-![Mux settings page containing API credentials](../docs/mux_settings.png)
+![Mux settings page containing API credentials](https://raw.githubusercontent.com/skttl/umbraco-mux/main/docs/mux_settings.png)
 
 You can create a new token from the `Create token` button in the upper right-hand side.
 
-![Mux token settings](../docs/mux_create_token.png) ![Mux token keys](../docs/mux_token.png)
+![Mux token settings](https://raw.githubusercontent.com/skttl/umbraco-mux/main/docs/mux_create_token.png) ![Mux token keys](https://raw.githubusercontent.com/skttl/umbraco-mux/main/docs/mux_token.png)
 
 Name your token, and make sure to give it permission to read and write Mux Video.
 
@@ -82,7 +82,7 @@ uMux comes with a property editor that enables synchronization between Umbraco M
 4. Add the new data type as a property to your media/content/member type (e.g., the default `umbracoMediaVideo` media type).
 5. Save your changes.
 
-![Data type settings for Mux Sync property editor](../docs/umbraco_data_type.png)
+![Data type settings for Mux Sync property editor](https://raw.githubusercontent.com/skttl/umbraco-mux/main/docs/umbraco_data_type.png)
 
 You can name the property and place it wherever you like. The only requirement is that it must be on the same content type as the Upload property.
 
@@ -94,7 +94,7 @@ When the Mux Sync property editor is placed on a content type, any changes to th
 
 For existing videos uploaded before adding the Mux Sync property editor, you can save the individual media items from Umbraco to trigger the automatic sync with Mux.
 
-![Umbraco media synced to Mux](../docs/umbraco_media.png)
+![Umbraco media synced to Mux](https://raw.githubusercontent.com/skttl/umbraco-mux/main/docs/umbraco_media.png)
 
 ### 5. Embedding video
 
