@@ -22,6 +22,28 @@ jobs:
       with:
         dotnet-version: 9.0.x
 
+    - name: Update package version
+      run: |
+        $version = "${{github.ref_name}}"
+        $packageJsonPath = "src/uMux/Client/public/umbraco-package.json"
+        $packageJson = Get-Content $packageJsonPath | ConvertFrom-Json
+        $packageJson.version = $version
+        $packageJson.extensions[0].js += "?v=$version"
+        $packageJson | ConvertTo-Json | Set-Content $packageJsonPath
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install npm dependencies
+      run: npm install
+      working-directory: src/uMux/Client
+
+    - name: Build npm package
+      run: npm run build
+      working-directory: src/uMux/Client
+
     - name: Build & Pack
       run: dotnet pack src\uMux\uMux.csproj -c Release /p:Version=${{github.ref_name}}
 
