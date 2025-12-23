@@ -13,6 +13,7 @@
     <Title>uMux </Title>
     <Description>...</Description>
     <PackageTags>umbraco;umbraco-marketplace</PackageTags>
+    <PackageIcon>umux.png</PackageIcon>
     <Authors>Søren Kottal</Authors>
     <Copyright>$([System.DateTime]::UtcNow.ToString(`yyyy`)) © Søren Kottal</Copyright>
     <PackageProjectUrl>https://github.com/skttl/umbraco-mux</PackageProjectUrl>
@@ -37,6 +38,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\.github\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\.github\umux.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
