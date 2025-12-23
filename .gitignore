@@ -354,3 +354,4 @@ MigrationBackup/
 
 # Rider
 src/.idea
+src/uMux/wwwroot/App_Plugins/uMux
