@@ -1,14 +1,17 @@
 {
-    "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json", 
-    "AuthorDetails": {
-      "Name": "Søren Kottal",
-      "ImageUrl": "https://github.com/skttl.png"
-    },
-    "Category": "",
-    "Description": "",
-    "LicenseTypes": [ "Free" ],
-    "IssueTrackerUrl": "https://github.com/skttl/umbraco-mux/issues",
-    "PackageType": "Package",
-    "Tags": [],
-    "Title": "uMux "
-  }
+  "$schema": "https://marketplace.umbraco.com/umbraco-marketplace-schema.json",
+  "AuthorDetails": {
+    "Name": "Søren Kottal",
+    "ImageUrl": "https://github.com/skttl.png"
+  },
+  "Category": "PIM & DAM",
+  "Description": "Automatically sync local video assets from Umbraco to Mux",
+  "LicenseTypes": [
+    "Free"
+  ],
+  "DocumentationUrl": "https://github.com/skttl/umbraco-mux#readme",
+  "IssueTrackerUrl": "https://github.com/skttl/umbraco-mux/issues",
+  "PackageType": "Integration",
+  "Tags": [],
+  "Title": "uMux "
+}
