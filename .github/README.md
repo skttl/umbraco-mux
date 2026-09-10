@@ -2,14 +2,14 @@
 
 [![Downloads](https://img.shields.io/nuget/dt/Umbraco.Community.uMux?color=cc9900)](https://www.nuget.org/packages/Umbraco.Community.uMux/)
 [![NuGet](https://img.shields.io/nuget/vpre/Umbraco.Community.uMux?color=0273B3)](https://www.nuget.org/packages/Umbraco.Community.uMux)
-[![GitHub license](https://img.shields.io/github/license/skttl/umbraco-mux?color=8AB803)](../LICENSE)
+[![GitHub license](https://img.shields.io/github/license/skttl/umbraco-mux?color=8AB803)](https://github.com/skttl/umbraco-mux/blob/main/LICENSE)
 
 Automatically sync local video assets from Umbraco to Mux.
 
 
 ## Quick Start
 
-1. Ensure you have an Umbraco v17+ site and a Mux account.
+1. Ensure you have an Umbraco v18+ site and a Mux account.
 2. Install the package:
    ```sh
    dotnet add package Umbraco.Community.uMux
@@ -22,7 +22,7 @@ Automatically sync local video assets from Umbraco to Mux.
 
 ## Prerequisites
 
-- Umbraco CMS v17 or newer
+- Umbraco CMS v18 or newer
 - A Mux account with API access
 
 ## Installation
@@ -156,10 +156,10 @@ In the examples, `@mediaVideo` is the media item in Umbraco, and `MuxVideo` is t
 - **No Mux asset created for existing videos?**
   - Re-save the media item in Umbraco to trigger sync.
 - **Still having issues?**
-  - See the [Contributing Guidelines](CONTRIBUTING.md) or open an issue.
+  - See the [Contributing Guidelines](https://github.com/skttl/umbraco-mux/blob/main/.github/CONTRIBUTING.md) or open an issue.
 
 ---
 
 ## Contributing
 
-Contributions to this package are most welcome! Please read the [Contributing Guidelines](CONTRIBUTING.md).
+Contributions to this package are most welcome! Please read the [Contributing Guidelines](https://github.com/skttl/umbraco-mux/blob/main/.github/CONTRIBUTING.md).

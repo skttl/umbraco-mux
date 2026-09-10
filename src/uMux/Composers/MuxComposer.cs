@@ -1,10 +1,6 @@
-using Asp.Versioning;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Microsoft.OpenApi;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Api.Management.OpenApi;
 using Umbraco.Cms.Core.Composing;
@@ -29,18 +25,14 @@ public class MuxComposer : IComposer
 
         builder.Services.AddScoped<IMuxService, MuxService>();
 
-        builder.Services.Configure<SwaggerGenOptions>(opt =>
-        {
-            opt.SwaggerDoc(
-                Constants.Swagger.ApiName,
-                new OpenApiInfo
-                {
-                    Title = Constants.Swagger.Title,
-                    Version = Constants.Swagger.Version,
-                }
-            );
-            opt.OperationFilter<MuxBackofficeOperationSecurityFilter>();
-        });
+        builder.AddBackOfficeOpenApiDocument(
+            Constants.Swagger.ApiName,
+            configure => configure
+                .WithTitle(Constants.Swagger.Title)
+                .WithUiTitle(Constants.Swagger.Title)
+                .WithBackOfficeAuthentication()
+                .ConfigureOpenApiOptions(options =>
+                    options.AddOperationTransformer<CustomOperationHandler>()));
 
         // media
         builder.AddNotificationAsyncHandler<MediaSavingNotification, MediaNotifications>();
@@ -60,36 +52,27 @@ public class MuxComposer : IComposer
         builder.AddNotificationAsyncHandler<MemberDeletedNotification, MemberNotifications>();
         builder.AddNotificationAsyncHandler<MemberSavingNotification, MemberNotifications>();
 
-        builder.Services.AddSingleton<IOperationIdHandler, CustomOperationHandler>();
-    }
-
-    public class MuxBackofficeOperationSecurityFilter
-        : BackOfficeSecurityRequirementsOperationFilterBase
-    {
-        protected override string ApiName => Constants.Swagger.ApiName;
     }
 
     // This is used to generate nice operation IDs in our swagger json file
     // So that the gnerated TypeScript client has nice method names and not too verbose
     // https://docs.umbraco.com/umbraco-cms/tutorials/creating-a-backoffice-api/umbraco-schema-and-operation-ids#operation-ids
-    public class CustomOperationHandler : OperationIdHandler
+    public class CustomOperationHandler : IOpenApiOperationTransformer
     {
-        public CustomOperationHandler(IOptions<ApiVersioningOptions> apiVersioningOptions)
-            : base(apiVersioningOptions) { }
-
-        protected override bool CanHandle(
-            ApiDescription apiDescription,
-            ControllerActionDescriptor controllerActionDescriptor
-        )
+        public Task TransformAsync(
+            Microsoft.OpenApi.OpenApiOperation operation,
+            OpenApiOperationTransformerContext context,
+            CancellationToken cancellationToken)
         {
-            return controllerActionDescriptor.ControllerTypeInfo.Namespace?.StartsWith(
-                "uMux.Controllers",
-                comparisonType: StringComparison.InvariantCultureIgnoreCase
-            )
-                is true;
-        }
+            if (context.Description.ActionDescriptor is ControllerActionDescriptor controllerActionDescriptor
+                && controllerActionDescriptor.ControllerTypeInfo.Namespace?.StartsWith(
+                    "uMux.Controllers",
+                    StringComparison.InvariantCultureIgnoreCase) is true)
+            {
+                operation.OperationId = context.Description.ActionDescriptor.RouteValues["action"];
+            }
 
-        public override string Handle(ApiDescription apiDescription) =>
-            $"{apiDescription.ActionDescriptor.RouteValues["action"]}";
+            return Task.CompletedTask;
+        }
     }
 }
