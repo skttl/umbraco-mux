@@ -3,48 +3,86 @@ name: Release Package
 on:
   push:
     tags:
-      - '[0-9]+.[0-9]+.[0-9]+-[a-zA-Z0-9]*'
       - '[0-9]+.[0-9]+.[0-9]'
+      - '[0-9]+.[0-9]+.[0-9]-*'
 
 jobs:
-  build:
-
+  release:
     runs-on: windows-latest
+    environment: release
+    permissions:
+      contents: write
+      id-token: write
+
+    env:
+      RELEASE_VERSION: ${{ github.ref_name }}
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Validate release version
+        shell: pwsh
+        run: |
+          if ($env:RELEASE_VERSION -notmatch '^\d+\.\d+\.\d+(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$') {
+            throw "Tag '$env:RELEASE_VERSION' is not a valid NuGet SemVer 2 version."
+          }
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v2
-      with:
-        dotnet-version: 10.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
 
-    - name: Update package version
-      run: |
-        $version = "${{github.ref_name}}"
-        $packageJsonPath = "src/uMux/Client/public/umbraco-package.json"
-        $packageJson = Get-Content $packageJsonPath | ConvertFrom-Json
-        $packageJson.version = $version
-        $packageJson.extensions[0].js += "?v=$version"
-        $packageJson | ConvertTo-Json | Set-Content $packageJsonPath
+      - name: Update Umbraco package version
+        shell: pwsh
+        run: |
+          $packageJsonPath = 'src/uMux/Client/public/umbraco-package.json'
+          $packageJson = Get-Content -Raw $packageJsonPath | ConvertFrom-Json
+          $packageJson.version = $env:RELEASE_VERSION
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
+          foreach ($extension in $packageJson.extensions) {
+            if ($extension.js -match '\?v=') {
+              $extension.js = $extension.js -replace '\?v=[^"&]*', "?v=$env:RELEASE_VERSION"
+            } else {
+              $extension.js = "$($extension.js)?v=$env:RELEASE_VERSION"
+            }
+          }
 
-    - name: Install npm dependencies
-      run: npm install
-      working-directory: src/uMux/Client
+          $packageJson | ConvertTo-Json -Depth 10 | Set-Content -Encoding utf8 $packageJsonPath
 
-    - name: Build npm package
-      run: npm run build
-      working-directory: src/uMux/Client
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-    - name: Build & Pack
-      run: dotnet pack src\uMux\uMux.csproj -c Release /p:Version=${{github.ref_name}}
+      - name: Install npm dependencies
+        run: npm ci
+        working-directory: src/uMux/Client
 
-    - name: Push to NuGet
-      run: dotnet nuget push **\*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
+      - name: Build npm package
+        run: npm run build
+        working-directory: src/uMux/Client
+
+      - name: Build and pack NuGet package
+        run: dotnet pack src/uMux/uMux.csproj --configuration Release --output artifacts /p:PackageVersion=$env:RELEASE_VERSION
+
+      - name: NuGet login (OIDC)
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push package to NuGet
+        shell: pwsh
+        run: |
+          Get-ChildItem artifacts -Filter '*.nupkg' | ForEach-Object {
+            dotnet nuget push $_.FullName --api-key '${{ steps.nuget-login.outputs.NUGET_API_KEY }}' --source https://api.nuget.org/v3/index.json --skip-duplicate
+          }
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: uMux ${{ github.ref_name }}
+          generate_release_notes: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          files: artifacts/*.nupkg
