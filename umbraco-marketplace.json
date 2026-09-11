@@ -12,6 +12,16 @@
   "DocumentationUrl": "https://github.com/skttl/umbraco-mux#readme",
   "IssueTrackerUrl": "https://github.com/skttl/umbraco-mux/issues",
   "PackageType": "Integration",
+  "Screenshots": [
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/skttl/umbraco-mux/main/docs/umbraco_data_type.png",
+      "Caption": "Configure the Mux Sync property editor by selecting the Upload property that contains the video file."
+    },
+    {
+      "ImageUrl": "https://raw.githubusercontent.com/skttl/umbraco-mux/main/docs/umbraco_media.png",
+      "Caption": "View the Mux Sync status and playback information on an Umbraco media item."
+    }
+  ],
   "Tags": [],
   "Title": "uMux"
 }
