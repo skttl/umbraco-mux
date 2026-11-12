@@ -9,7 +9,7 @@ Automatically sync local video assets from Umbraco to Mux.
 
 ## Quick Start
 
-1. Ensure you have an Umbraco v18+ site and a Mux account.
+1. Ensure you have an Umbraco v19+ site and a Mux account.
 2. Install the package:
    ```sh
    dotnet add package Umbraco.Community.uMux
@@ -22,7 +22,7 @@ Automatically sync local video assets from Umbraco to Mux.
 
 ## Prerequisites
 
-- Umbraco CMS v18 or newer
+- Umbraco CMS v19 or newer
 - A Mux account with API access
 
 ## Installation

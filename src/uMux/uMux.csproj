@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <StaticWebAssetBasePath>/</StaticWebAssetBasePath>
@@ -24,12 +24,11 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Mux.Csharp.Sdk" Version="2.1.0" />
-    <PackageReference Include="Microsoft.OpenApi" Version="2.12.2" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.12" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="18.0.0" />
-    <PackageReference Include="Umbraco.Cms.Web.Common" Version="18.0.0" />
-    <PackageReference Include="Umbraco.Cms.Api.Common" Version="18.0.0" />
-    <PackageReference Include="Umbraco.Cms.Api.Management" Version="18.0.0" />
+    <PackageReference Include="Microsoft.OpenApi" Version="3.11.0" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="19.0.0-rc1" />
+    <PackageReference Include="Umbraco.Cms.Web.Common" Version="19.0.0-rc1" />
+    <PackageReference Include="Umbraco.Cms.Api.Common" Version="19.0.0-rc1" />
+    <PackageReference Include="Umbraco.Cms.Api.Management" Version="19.0.0-rc1" />
   </ItemGroup>
   <ItemGroup>
     <!-- Dont include the client folder as part of packaging nuget build -->

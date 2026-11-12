@@ -7,9 +7,8 @@ export const onInit: UmbEntryPointOnInit = (_host, _extensionRegistry) => {
     const config = authContext?.getOpenApiConfiguration();
 
     client.setConfig({
-      auth: config?.token ?? undefined,
       baseUrl: config?.base ?? "",
-      credentials: config?.credentials ?? "same-origin",
+      credentials: "include",
     });
   });
 }

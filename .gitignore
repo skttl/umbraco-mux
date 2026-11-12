@@ -356,3 +356,4 @@ MigrationBackup/
 src/.idea
 src/uMux/wwwroot/App_Plugins/uMux
 src/uMux.TestSite/appsettings.Local.json
+.artifacts/

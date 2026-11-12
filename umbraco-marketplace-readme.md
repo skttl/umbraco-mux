@@ -11,7 +11,7 @@ uMux connects Umbraco Media to [Mux Video](https://www.mux.com/video). Upload a 
 
 ## Requirements
 
-- Umbraco CMS 18 or newer
+- Umbraco CMS 19 or newer
 - A Mux account with API access
 
 ## Installation
